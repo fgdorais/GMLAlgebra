@@ -1,2 +1,2 @@
-# GMLAlgebra
-GML Algebra Package
+# Green Mountain Library
+## Algebra Package
