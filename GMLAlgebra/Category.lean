@@ -19,10 +19,7 @@ variable {s : CategorySig β} [Category s]
 instance : DOpLeftId (no_index s.op) (no_index s.id) := ⟨Category.dop_left_id⟩
 instance : DOpRightId (no_index s.op) (no_index s.id) := ⟨Category.dop_right_id⟩
 
-instance (a : α) : OpLeftId (no_index (s.toMonoidSig a).op) (no_index (s.toMonoidSig a).id) := ⟨dop_left_id (a:=a) (b:=a) _⟩
-instance (a : α) : OpRightId (no_index (s.toMonoidSig a).op) (no_index (s.toMonoidSig a).id) := ⟨dop_right_id (a:=a) (b:=a) _⟩
-
---instance (a : α) : Monoid (no_index s.toMonoidSig a) := Monoid.infer _
+instance : Semicategory (no_index s.toSemicategorySig) := Semicategory.infer _
 
 end Category
 
@@ -38,10 +35,10 @@ protected def CancelCategory.infer (s : CategorySig β) [DOpAssoc s.op] [DOpLeft
 namespace CancelCategory
 variable {s : CategorySig β} [CancelCategory s]
 
-instance (a : α) : OpLeftCancel (no_index (s.toMonoidSig a).op) := ⟨dop_left_cancel (a:=a) (b:=a) (c:=a) _⟩
-instance (a : α) : OpRightCancel (no_index (s.toMonoidSig a).op) := ⟨dop_right_cancel (a:=a) (b:=a) (c:=a) _⟩
+instance : DOpLeftCancel (no_index s.op) := ⟨CancelCategory.dop_left_cancel⟩
+instance : DOpRightCancel (no_index s.op) := ⟨CancelCategory.dop_right_cancel⟩
 
---instance (a : α) : CancelMonoid (no_index s.toMonoidSig a) := CancelMonoid.infer _
+instance : CancelSemicategory (no_index s.toSemicategorySig) := CancelSemicategory.infer _
 
 end CancelCategory
 
