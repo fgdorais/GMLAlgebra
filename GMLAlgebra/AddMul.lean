@@ -178,7 +178,7 @@ instance Int.instUnitalCommRing : UnitalCommRing (addMulUnitalRingSig Int) where
   add_assoc := Int.add_assoc
   add_comm := Int.add_comm
   add_right_id := Int.add_zero
-  add_right_inv := Int.add_neg
+  add_right_inv := Int.add_neg_self_right
   mul_assoc := Int.mul_assoc
   mul_comm := Int.mul_comm
   mul_right_id := Int.mul_one
