@@ -31,7 +31,7 @@ def op : Expr xs → Expr xs → Expr xs
 | a, id => a
 
 section Eval
-variable {α} (s : MonoidSig α)
+variable (s : MonoidSig α)
 
 def eval {xs : List α} : Expr xs → α
 | ofSemigroup e => e.eval s.toSemigroupSig
@@ -56,7 +56,7 @@ variable [Monoid s]
 end Eval
 
 section Completeness
-variable {α} (xs : List α)
+variable (xs : List α)
 
 def sig : MonoidSig (Expr xs) where
   op := Expr.op

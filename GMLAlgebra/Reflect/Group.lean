@@ -114,16 +114,16 @@ theorem isReduced_rpos (h : w.isReduced) : (w.rpos i).isReduced := by
   | pos _ _ => exact h
   | neg j _ =>
     by_cases i = j with
-    | isTrue hij => unfold rpos; rw [if_pos hij, isReduced_neg_tail h]
-    | isFalse hij => unfold rpos; rw [if_neg hij, isReduced, decide_eq_true hij, h, and]
+    | isTrue hij => unfold rpos; clean; rw [if_pos hij, isReduced_neg_tail h]
+    | isFalse hij => unfold rpos; clean; rw [if_neg hij, isReduced, decide_eq_true hij, h, and]
 
 theorem isReduced_rneg (h : w.isReduced) : (w.rneg i).isReduced := by
   match w with
   | id => exact h
   | pos j _ =>
     by_cases i = j with
-    | isTrue hij => unfold rneg; rw [if_pos hij, isReduced_pos_tail h]
-    | isFalse hij => unfold rneg; rw [if_neg hij, isReduced, decide_eq_true hij, h, and]
+    | isTrue hij => unfold rneg; clean; rw [if_pos hij, isReduced_pos_tail h]
+    | isFalse hij => unfold rneg; clean; rw [if_neg hij, isReduced, decide_eq_true hij, h, and]
   | neg _ _ => exact h
 
 theorem isReduced_rapp (h : w.isReduced) : (rapp v w).isReduced := by
@@ -416,7 +416,7 @@ private theorem op_word_eq_rapp (a b : Expr xs) : (Expr.op a b).word = Word.rapp
   rw [Expr.op, Word.rapp_eq a.isReduced b.isReduced]
 
 section Completeness
-variable {α} (xs : List α)
+variable (xs : List α)
 
 @[reducible] def sig : GroupSig (Expr xs) where
   op := Expr.op
@@ -425,8 +425,8 @@ variable {α} (xs : List α)
 
 instance : Group (sig xs) where
   op_assoc (a b c) := by apply Expr.eq; simp only [op_word_eq_rapp]; exact Word.rapp_assoc c.isReduced
-  op_right_id (a) := by apply Expr.eq; unfold Expr.op Expr.id; exact Word.rinv_rinv a.isReduced
-  op_right_inv (a) := by apply Expr.eq; unfold Expr.op Expr.inv Expr.id; exact Word.raux_self
+  op_right_id (a) := by apply Expr.eq; exact Word.rinv_rinv a.isReduced
+  op_right_inv (a) := by apply Expr.eq; exact Word.raux_self
 
 end Completeness
 
@@ -436,19 +436,19 @@ variable (s : GroupSig α) [Group s]
 def eval : Expr xs → α | ⟨a,_⟩ => Word.eval s a
 
 @[simp] theorem eval_lift (a : Expr xs) : eval s (Expr.lift x a) = eval s a := by
-  unfold Expr.lift eval; rw [Word.eval_lift]
+  unfold Expr.lift eval; clean; rw [Word.eval_lift]
 
 @[simp] theorem eval_var (i : Index xs) : eval s (Expr.var i) = i.val := by
-  unfold Expr.var Expr.pos Expr.id eval; rw [Word.eval_rpos, Word.eval_id, op_right_id s.op]
+  unfold Expr.var Expr.pos Expr.id eval; clean; rw [Word.eval_rpos, Word.eval_id, op_right_id s.op]
 
 @[simp] theorem eval_id : eval s (Expr.id (xs:=xs)) = s.id := by
-  unfold Expr.id eval; rw [Word.eval_id]
+  unfold Expr.id eval; clean; rw [Word.eval_id]
 
 @[simp] theorem eval_inv (a : Expr xs) : eval s (Expr.inv a) = s.inv (eval s a) := by
-  unfold Expr.inv eval; rw [Word.eval_rinv]
+  unfold Expr.inv eval; clean; rw [Word.eval_rinv]
 
 @[simp] theorem eval_op (a b : Expr xs) : eval s (Expr.op a b) = s.op (eval s a) (eval s b) := by
-  unfold Expr.op eval; rw [Word.eval_raux, Word.eval_rinv, inv_invol s.inv]
+  unfold Expr.op eval; clean; rw [Word.eval_raux, Word.eval_rinv, inv_invol s.inv]
 
 end Eval
 

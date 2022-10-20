@@ -34,7 +34,7 @@ def op : Expr xs → Expr xs → Expr xs
 | a, app b i => app (op a b) i
 
 section Eval
-variable {α} (s : SemigroupSig α)
+variable (s : SemigroupSig α)
 
 def eval {xs : List α} : Expr xs → α
 | var i => i.val
@@ -57,7 +57,7 @@ variable [Semigroup s]
 end Eval
 
 section Completeness
-variable {α} (xs : List α)
+variable (xs : List α)
 
 def sig : SemigroupSig (Expr xs) where
   op := Expr.op
