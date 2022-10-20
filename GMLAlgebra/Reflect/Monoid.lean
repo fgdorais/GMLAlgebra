@@ -94,19 +94,21 @@ protected def Reflect.eq {α} (s : MonoidSig α) (x xs) [inst : Reflect s x xs] 
 namespace Reflect
 variable {α} (s : MonoidSig α) [Monoid s]
 
-@[scoped simp] scoped instance instLift (y x : α) {xs : List α} [Reflect s y xs] : Reflect s y (x :: xs) where
+class Var (x : α) (xs : List α) extends Reflect s x xs
+
+instance (priority:=low) instVarLift (x y : α) (xs : List α) [Var s y xs] : Var s y (x :: xs) where
   expr := Expr.lift x (expr s y)
   eval_eq := by simp [eval_eq]
 
-@[scoped simp] scoped instance instVar (x : α) {xs : List α} : Reflect s x (x :: xs) where
+instance instVarSelf (x : α) (xs : List α) : Var s x (x :: xs) where
   expr := Expr.ofSemigroup (Semigroup.Expr.var Index.head)
   eval_eq := by simp
 
-@[scoped simp] scoped instance instId {xs : List α} : Reflect s (no_index s.id) xs where
+instance instId {xs : List α} : Reflect s (no_index s.id) xs where
   expr := Expr.id
   eval_eq := by simp
 
-@[scoped simp] scoped instance instOp (x y : α) {xs : List α} [Reflect s x xs] [Reflect s y xs] : Reflect s (no_index (s.op x y)) xs where
+instance instOp (x y : α) {xs : List α} [Reflect s x xs] [Reflect s y xs] : Reflect s (no_index (s.op x y)) xs where
   expr := Expr.op (expr s x) (expr s y)
   eval_eq := by simp [eval_eq]
 

@@ -138,21 +138,23 @@ protected def Reflect.eq {α} (s : MonoidSig α) (x xs) [inst : Reflect s x xs] 
 namespace Reflect
 variable {α} (s : MonoidSig α) [CommMonoid s]
 
-instance instLift (y x : α) {xs : List α} [Reflect s y xs] : Reflect s y (x :: xs) where
+class Var (x : α) (xs : List α) extends Reflect s x xs
+
+instance (priority:=low) instVarLift (x y : α) (xs : List α) [Var s y xs] : Var s y (x :: xs) where
   expr := Expr.lift x (expr s y)
   eval_eq := by simp [eval_eq]
 
-instance instVar (x : α) {xs : List α} : Reflect s x (x :: xs) where
+instance instVarSelf (x : α) (xs : List α) : Var s x (x :: xs) where
   expr := Expr.cons 1 Expr.id
   eval_eq := by simp; rw [Algebra.op_right_id s.op]
-
-instance instOp (x y : α) {xs : List α} [Reflect s x xs] [Reflect s y xs] : Reflect s (no_index (s.op x y)) xs where
-  expr := Expr.op (expr s x) (expr s y)
-  eval_eq := by simp [eval_eq]
 
 instance instId {xs : List α} : Reflect s (no_index (s.id)) xs where
   expr := Expr.id
   eval_eq := by simp
+
+instance instOp (x y : α) {xs : List α} [Reflect s x xs] [Reflect s y xs] : Reflect s (no_index (s.op x y)) xs where
+  expr := Expr.op (expr s x) (expr s y)
+  eval_eq := by simp [eval_eq]
 
 end Reflect
 
