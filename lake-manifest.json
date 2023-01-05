@@ -1,0 +1,15 @@
+{"version": 4,
+ "packagesDir": "./lake-packages",
+ "packages":
+ [{"git":
+   {"url": "https://github.com/fgdorais/GMLInit.git",
+    "subDir?": null,
+    "rev": "d54ce18f409002bb15026b711ac24ef242b8cc7a",
+    "name": "GMLInit",
+    "inputRev?": "main"}},
+  {"git":
+   {"url": "https://github.com/leanprover/std4.git",
+    "subDir?": null,
+    "rev": "12d9d627dfce3a68333a220f02b0cc8e4707bb17",
+    "name": "std",
+    "inputRev?": "main"}}]}
