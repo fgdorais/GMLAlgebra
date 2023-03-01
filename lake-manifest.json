@@ -1,15 +1,19 @@
-{"version": 4,
- "packagesDir": "./lake-packages",
+{"version": 5,
+ "packagesDir": "lake-packages",
  "packages":
  [{"git":
-   {"url": "https://github.com/fgdorais/GMLInit.git",
+   {"url": "https://github.com/fgdorais/GMLInit",
     "subDir?": null,
-    "rev": "d54ce18f409002bb15026b711ac24ef242b8cc7a",
+    "rev": "95cc54c01df6c4a71a2751c220c9f485d727bb53",
+    "opts": {},
     "name": "GMLInit",
-    "inputRev?": "main"}},
+    "inputRev?": "main",
+    "inherited": false}},
   {"git":
-   {"url": "https://github.com/leanprover/std4.git",
+   {"url": "https://github.com/fgdorais/std4",
     "subDir?": null,
-    "rev": "12d9d627dfce3a68333a220f02b0cc8e4707bb17",
-    "name": "std",
-    "inputRev?": "main"}}]}
+    "rev": "453364ebc67fff4d0e035aa895ae67a7d10ce74f",
+    "opts": {},
+    "name": "Std",
+    "inputRev?": "nat-all",
+    "inherited": true}}]}
