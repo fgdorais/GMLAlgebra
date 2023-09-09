@@ -92,7 +92,7 @@ variable [CommMonoid s]
         calc
         _ = eval s (Expr.op (cons (m + 1) a) (cons (n + 1) b)) := rfl
         _ = eval s (cons (x:=x) ((m + 1) + (n + 1)) (Expr.op a b)) := by rw [Expr.op]
-        _ = eval s (cons (m + n + 1 + 1) (Expr.op a b)) := by rw [Nat.add_succ, Nat.succ_add]; rfl
+        _ = eval s (cons (m + n + 1 + 1) (Expr.op a b)) := by rw [Nat.add_succ, Nat.succ_add]
         _ = s.op x (s.op x (eval s (cons (m + n) (Expr.op a b)))) := by rw [eval_cons_succ, eval_cons_succ]
         _ = s.op x (s.op x (eval s (Expr.op (cons m a) (cons n b)))) := by rw [Expr.op]
         _ = s.op x (s.op x (s.op (eval s (cons m a)) (eval s (cons n b)))) := by rw [ih]
