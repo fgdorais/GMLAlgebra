@@ -1,3 +1,4 @@
+import GMLInit
 import GMLAlgebra.Signatures
 import GMLAlgebra.Identities
 import GMLAlgebra.UnitalRig
@@ -183,5 +184,15 @@ instance Int.instUnitalCommRing : UnitalCommRing (addMulUnitalRingSig Int) where
   mul_comm := Int.mul_comm
   mul_right_id := Int.mul_one
   mul_right_distrib := Int.add_mul
+
+-- instance Rat.instUnitalCommRing : UnitalCommRing (addMulUnitalRingSig Rat) where
+--   add_assoc := Rat.add_assoc
+--   add_comm := Rat.add_comm
+--   add_right_id := Rat.add_zero
+--   add_right_inv := Rat.add_neg_self_right
+--   mul_assoc := Rat.mul_assoc
+--   mul_comm := Rat.mul_comm
+--   mul_right_id := Rat.mul_one
+--   mul_right_distrib := Rat.add_mul
 
 end instances
