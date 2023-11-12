@@ -4,7 +4,7 @@
  [{"git":
    {"url": "https://github.com/fgdorais/GMLInit",
     "subDir?": null,
-    "rev": "ec8f63bdfa4037f6b5613980c2eea5f89990b958",
+    "rev": "6a5a546d21514051290b18df09ece48ecfa41144",
     "opts": {},
     "name": "GMLInit",
     "inputRev?": "main",
@@ -12,7 +12,7 @@
   {"git":
    {"url": "https://github.com/fgdorais/std4",
     "subDir?": null,
-    "rev": "90c1ca181fc593bd1b88c3f4e474de963e9ff926",
+    "rev": "617950af3c4dfab907cdfcdf302c3d2d005e12b5",
     "opts": {},
     "name": "std",
     "inputRev?": "nat-all",
