@@ -1,9 +1,11 @@
 import GMLAlgebra.Basic
+import GMLAlgebra.Instances
 import GMLAlgebra.Monoid
 import GMLAlgebra.Reflect.Semigroup
 
+open Logic
+
 namespace Algebra.Monoid
-open Algebra
 
 inductive Expr {α} (xs : List α)
 | ofSemigroup : Semigroup.Expr xs → Expr xs
@@ -130,17 +132,7 @@ local notation "e" => s.id
 example : (a ⋆ b) ⋆ (c ⋆ (e ⋆ d)) = (a ⋆ e) ⋆ ((b ⋆ c) ⋆ d) :=
   open Monoid.Reflect in Monoid.reflect s [a,b,c,d] rfl
 
-@[reducible] def Algebra.addMonoidSig (α) [HAdd α α α] [OfNat α 0] : MonoidSig α where
-  op := (.+.)
-  id := 0
-
-instance : CancelCommMonoid (addMonoidSig Nat) where
-  op_assoc := Nat.add_assoc
-  op_comm := Nat.add_comm
-  op_right_id := Nat.add_zero
-  op_right_cancel _ := Nat.add_right_cancel
-
 example (x y z : Nat) : x + (y + z) + 1 = (x + (0 + y)) + z + 1 :=
-  open Monoid.Reflect in Monoid.reflect (addMonoidSig Nat) [1,x,y,z] rfl
+  open Monoid.Reflect in Monoid.reflect Nat.sig.toAddMonoidSig [1,x,y,z] rfl
 
 end Example

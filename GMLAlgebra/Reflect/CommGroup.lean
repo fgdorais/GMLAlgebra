@@ -1,9 +1,11 @@
 import GMLAlgebra.Basic
+import GMLAlgebra.Instances
 import GMLAlgebra.Group
 import GMLAlgebra.Reflect.CommMonoid
 
+open Logic
+
 namespace Algebra.CommGroup
-open Algebra
 
 inductive Expr {α : Type _} : List α → Type _
 | nil : Expr []

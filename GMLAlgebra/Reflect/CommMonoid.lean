@@ -1,8 +1,10 @@
 import GMLAlgebra.Basic
+import GMLAlgebra.Instances
 import GMLAlgebra.Monoid
 
+open Logic
+
 namespace Algebra.CommMonoid
-open Algebra
 
 inductive Expr {α : Type _} : List α → Type _
 | nil : Expr []

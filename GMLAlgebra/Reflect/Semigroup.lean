@@ -1,5 +1,8 @@
 import GMLAlgebra.Basic
+import GMLAlgebra.Instances
 import GMLAlgebra.Semigroup
+
+open Logic
 
 namespace Algebra
 

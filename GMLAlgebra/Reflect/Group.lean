@@ -1,5 +1,8 @@
 import GMLAlgebra.Basic
+import GMLAlgebra.Instances
 import GMLAlgebra.Group
+
+open Logic
 
 namespace Algebra
 
@@ -92,7 +95,7 @@ theorem isReduced_lift {x : α} (h : w.isReduced) : (w.lift x).isReduced := by
       | isTrue rfl => simp [isReduced] at h
       | isFalse hne =>
         rw [lift, lift, isReduced, Bool.and_eq_true]
-        constr
+        constructor
         · apply decide_eq_true; intro | rfl => contradiction
         · exact ih (isReduced_pos_tail h)
   | neg i w ih =>
@@ -103,7 +106,7 @@ theorem isReduced_lift {x : α} (h : w.isReduced) : (w.lift x).isReduced := by
       | isTrue rfl => simp [isReduced] at h
       | isFalse hne =>
         rw [lift, lift, isReduced, Bool.and_eq_true]
-        constr
+        constructor
         · apply decide_eq_true; intro | rfl => contradiction
         · exact ih (isReduced_neg_tail h)
     | neg _ _ => rw [lift, lift, isReduced]; exact ih (isReduced_neg_tail h)
