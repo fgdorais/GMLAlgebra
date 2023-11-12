@@ -80,7 +80,7 @@ class OpCrossComm : Prop where
 def op_cross_comm [self : OpCrossComm op] := self.op_cross_comm
 
 class OpLeftId : Prop where
-  op_left_id (x) : e ⋆ x = x
+  protected op_left_id (x) : e ⋆ x = x
 def op_left_id {id} [self : OpLeftId op id] := self.op_left_id
 
 class OpRightId : Prop where
