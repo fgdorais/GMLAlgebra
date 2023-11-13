@@ -13,9 +13,13 @@ protected def Pos.sig : UnitalSemiringSig Pos where
   mul := Pos.mul
   one := Pos.one
 
-instance : OfNat Pos (nat_lit 1) := ⟨Pos.sig.one⟩
-instance : Add Pos := ⟨Pos.sig.add⟩
-instance : Mul Pos := ⟨Pos.sig.mul⟩
+namespace Algebra.Notation
+
+scoped instance : OfNat Pos (nat_lit 1) := ⟨Pos.sig.one⟩
+scoped instance : Add Pos := ⟨Pos.sig.add⟩
+scoped instance : Mul Pos := ⟨Pos.sig.mul⟩
+
+end Algebra.Notation
 
 instance Pos.instUnitalCommSemiring : UnitalCommSemiring Pos.sig where
   add_assoc := Pos.add_assoc
@@ -31,10 +35,14 @@ protected def Nat.sig : UnitalRigSig Nat where
   zero := Nat.zero
   one := Nat.succ Nat.zero
 
-instance : OfNat Nat (nat_lit 0) := ⟨Nat.sig.zero⟩
-instance : OfNat Nat (nat_lit 1) := ⟨Nat.sig.one⟩
-instance : Add Nat := ⟨Nat.sig.add⟩
-instance : Mul Nat := ⟨Nat.sig.mul⟩
+namespace Algebra.Notation
+
+scoped instance : OfNat Nat (nat_lit 0) := ⟨Nat.sig.zero⟩
+scoped instance : OfNat Nat (nat_lit 1) := ⟨Nat.sig.one⟩
+scoped instance : Add Nat := ⟨Nat.sig.add⟩
+scoped instance : Mul Nat := ⟨Nat.sig.mul⟩
+
+end Algebra.Notation
 
 instance Nat.instUnitalCommRig : UnitalCommRig Nat.sig where
   add_assoc := Nat.add_assoc
@@ -53,12 +61,6 @@ protected def Int.sig : UnitalRingSig Int where
   zero := Int.ofNat 0
   one := Int.ofNat 1
 
-instance : OfNat Int (nat_lit 0) := ⟨Int.sig.zero⟩
-instance : OfNat Int (nat_lit 1) := ⟨Int.sig.one⟩
-instance : Add Int := ⟨Int.sig.add⟩
-instance : Neg Int := ⟨Int.sig.neg⟩
-instance : Mul Int := ⟨Int.sig.mul⟩
-
 instance Int.instUnitalCommRing : UnitalCommRing Int.sig where
   add_assoc := Int.add_assoc
   add_comm := Int.add_comm
@@ -68,5 +70,15 @@ instance Int.instUnitalCommRing : UnitalCommRing Int.sig where
   mul_comm := Int.mul_comm
   mul_right_id := Int.mul_one
   mul_right_distrib := Int.add_mul
+
+namespace Algebra.Notation
+
+scoped instance : OfNat Int (nat_lit 0) := ⟨Int.sig.zero⟩
+scoped instance : OfNat Int (nat_lit 1) := ⟨Int.sig.one⟩
+scoped instance : Add Int := ⟨Int.sig.add⟩
+scoped instance : Neg Int := ⟨Int.sig.neg⟩
+scoped instance : Mul Int := ⟨Int.sig.mul⟩
+
+end Algebra.Notation
 
 end instances
