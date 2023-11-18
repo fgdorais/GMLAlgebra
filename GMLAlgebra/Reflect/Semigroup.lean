@@ -95,7 +95,7 @@ instance instVarSelf (x : α) (xs : List α) : Var s x (x :: xs) where
   expr := Expr.var Index.head
   eval_eq := by simp
 
-instance instOp (x y : α) {xs : List α} [Reflect s x xs] [Reflect s y xs] : Reflect s (no_index s.op x y) xs where
+instance instOp (x y : α) {xs : List α} [Reflect s x xs] [Reflect s y xs] : Reflect s (no_index (s.op x y)) xs where
   expr := Expr.op (expr s x) (expr s y)
   eval_eq := by simp [eval_eq]
 
@@ -110,12 +110,15 @@ end Semigroup
 end Algebra
 
 section Example
-open Algebra
+open Algebra Notation
 variable {α} (s : SemigroupSig α) [Semigroup s] (a b c d : α)
 
 local infix:70 " ⋆ " => s.op
 
 example : (a ⋆ b) ⋆ (c ⋆ d) = a ⋆ ((b ⋆ c) ⋆ d) :=
   Semigroup.reflect s [a,b,c,d] rfl
+
+example (x y z : Pos) : 1 + (x + y) + (z + y) = (1 + x + (y + z)) + y :=
+  Semigroup.reflect Pos.sig.toAddSemigroupSig [1,x,y,z] rfl
 
 end Example

@@ -165,3 +165,18 @@ theorem reflect {α} (s : MonoidSig α) [CommMonoid s] (xs : List α) {a b : α}
   rw [←Reflect.eq s a xs, ←Reflect.eq s b xs, h]
 
 end Algebra.CommMonoid
+
+section Example
+open Algebra Notation
+variable {α} (s : MonoidSig α) [CommMonoid s] (a b c d : α)
+
+local infix:70 " ⋆ " => s.op
+local notation "e" => s.id
+
+example : ((a ⋆ b) ⋆ (c ⋆ (e ⋆ d))) ⋆ a = (a ⋆ (a ⋆ e)) ⋆ ((b ⋆ c) ⋆ d) :=
+  CommMonoid.reflect s [a,b,c,d] rfl
+
+example (x y z : Nat) : x + (z + y) + 1 = 1 + (x + (0 + y)) + z :=
+  CommMonoid.reflect Nat.sig.toAddMonoidSig [1,x,y,z] rfl
+
+end Example

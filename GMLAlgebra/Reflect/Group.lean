@@ -478,11 +478,11 @@ variable (s : GroupSig α) [Group s]
   expr := Expr.id
   eval_eq := by simp [eval_eq]
 
-@[simp] instance instInv (x : α) {xs : List α} [Reflect s x xs] : Reflect s (no_index s.inv x) xs where
+@[simp] instance instInv (x : α) {xs : List α} [Reflect s x xs] : Reflect s (no_index (s.inv x)) xs where
   expr := Expr.inv (expr s x)
   eval_eq := by simp [eval_eq]
 
-@[simp] instance instOp (x y : α) {xs : List α} [Reflect s x xs] [Reflect s y xs] : Reflect s (no_index s.op x y) xs where
+@[simp] instance instOp (x y : α) {xs : List α} [Reflect s x xs] [Reflect s y xs] : Reflect s (no_index (s.op x y)) xs where
   expr := Expr.op (expr s x) (expr s y)
   eval_eq := by simp [eval_eq]
 
@@ -497,7 +497,7 @@ end Group
 end Algebra
 
 section Example
-open Algebra
+open Algebra Notation
 variable {α} (s : GroupSig α) [Group s] (a b c d : α)
 
 local infixr:70 " ⋆ " => s.op
@@ -506,5 +506,8 @@ local notation "e" => s.id
 
 example : (a ⋆ b)⁻¹ ⋆ (c ⋆ d⁻¹) = e ⋆ b⁻¹ ⋆ ((a⁻¹ ⋆ e ⋆ c) ⋆ d⁻¹) :=
   Group.reflect s [a,b,c,d] rfl
+
+example (x y z : Int) : x + (-y + z) + -1 = (x - (0 + y)) + z - 1 :=
+  Group.reflect Int.sig.toAddGroupSig [1,x,y,z] rfl
 
 end Example

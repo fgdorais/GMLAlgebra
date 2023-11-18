@@ -6,6 +6,7 @@ import GMLAlgebra.Hom
 import GMLAlgebra.Identities
 import GMLAlgebra.Instances
 import GMLAlgebra.Monoid
+import GMLAlgebra.Reflect
 import GMLAlgebra.Rig
 import GMLAlgebra.Ring
 import GMLAlgebra.Semicategory

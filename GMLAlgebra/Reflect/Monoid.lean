@@ -123,16 +123,16 @@ theorem reflect {α} (s : MonoidSig α) [Monoid s] (xs : List α) {a b : α} [Re
 end Algebra.Monoid
 
 section Example
-open Algebra
+open Algebra Notation
 variable {α} (s : MonoidSig α) [Monoid s] (a b c d : α)
 
 local infix:70 " ⋆ " => s.op
 local notation "e" => s.id
 
 example : (a ⋆ b) ⋆ (c ⋆ (e ⋆ d)) = (a ⋆ e) ⋆ ((b ⋆ c) ⋆ d) :=
-  open Monoid.Reflect in Monoid.reflect s [a,b,c,d] rfl
+  Monoid.reflect s [a,b,c,d] rfl
 
 example (x y z : Nat) : x + (y + z) + 1 = (x + (0 + y)) + z + 1 :=
-  open Monoid.Reflect in Monoid.reflect Nat.sig.toAddMonoidSig [1,x,y,z] rfl
+  Monoid.reflect Nat.sig.toAddMonoidSig [1,x,y,z] rfl
 
 end Example

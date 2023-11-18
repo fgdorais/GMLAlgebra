@@ -274,7 +274,7 @@ instance instInv (x : α) {xs : List α} [Reflect s x xs] : Reflect s (no_index 
   expr := Expr.inv (expr s x)
   eval_eq := by rw [Expr.eval_inv, eval_eq]
 
-instance instId {xs : List α} : Reflect s (no_index (s.id)) xs where
+instance instId {xs : List α} : Reflect s (no_index s.id) xs where
   expr := Expr.id
   eval_eq := by rw [Expr.eval_id]
 
@@ -285,3 +285,19 @@ theorem reflect {α} (s : GroupSig α) [CommGroup s] (xs : List α) {a b : α} [
   rw [←Reflect.eq s a xs, ←Reflect.eq s b xs, h]
 
 end Algebra.CommGroup
+
+section Example
+open Algebra Notation
+variable {α} (s : GroupSig α) [CommGroup s] (a b c d : α)
+
+local infixr:70 " ⋆ " => s.op
+local postfix:max "⁻¹" => s.inv
+local notation "e" => s.id
+
+example : (a ⋆ b)⁻¹ ⋆ (c ⋆ d⁻¹) = e ⋆ ((c ⋆ a⁻¹ ⋆ e) ⋆ b⁻¹ ⋆ d⁻¹) :=
+  CommGroup.reflect s [a,b,c,d] rfl
+
+example (x y z : Int) : x + (-y + z) + z + -1 = z + (x - (0 + y)) + z - 1 :=
+  CommGroup.reflect Int.sig.toAddGroupSig [1,x,y,z] rfl
+
+end Example
