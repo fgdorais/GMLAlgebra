@@ -43,6 +43,8 @@ unif_hint {α} (s : RigSig α) (t : MonoidSig α) where
 structure RingSig (α) extends RigSig α where
   neg : α → α
 
+abbrev RingSig.sub (self : RingSig α) (x y) := self.add x (self.neg y)
+
 def RingSig.toAddGroupSig {α} (s : RingSig α) : GroupSig α where
   toMonoidSig := s.toAddMonoidSig
   inv := s.neg

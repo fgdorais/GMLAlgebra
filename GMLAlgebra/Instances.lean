@@ -75,8 +75,9 @@ namespace Algebra.Notation
 
 scoped instance : OfNat Int (nat_lit 0) := ⟨Int.sig.zero⟩
 scoped instance : OfNat Int (nat_lit 1) := ⟨Int.sig.one⟩
-scoped instance : Add Int := ⟨Int.sig.add⟩
 scoped instance : Neg Int := ⟨Int.sig.neg⟩
+scoped instance : Add Int := ⟨Int.sig.add⟩
+scoped instance : Sub Int := ⟨Int.sig.sub⟩
 scoped instance : Mul Int := ⟨Int.sig.mul⟩
 
 end Algebra.Notation
