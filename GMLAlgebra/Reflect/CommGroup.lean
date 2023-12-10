@@ -4,6 +4,7 @@ import GMLAlgebra.Group
 import GMLAlgebra.Reflect.CommMonoid
 
 open Logic
+open List
 
 namespace Algebra.CommGroup
 
@@ -186,7 +187,7 @@ theorem eval_lift {x : α} {xs : List α} (a : Expr xs) : eval s (Expr.lift x a)
 
 theorem eval_id : ∀ {xs : List α}, eval s (Expr.id (xs:=xs)) = s.id
 | [] => by
-  unfold Expr.id eval split; clean
+  simp only [Expr.id, eval, split]
   rw [Algebra.op_right_inv s.op]
 | _::_ => by
   unfold Expr.id

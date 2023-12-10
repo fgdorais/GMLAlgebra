@@ -8,4 +8,10 @@ package GMLAlgebra {
 @[default_target]
 lean_lib GMLAlgebra {}
 
-require GMLInit from git "https://github.com/fgdorais/GMLInit"@"main"
+require std from git "https://github.com/leanprover/std4" @ "main"
+
+require extra from git "https://github.com/fgdorais/extra4" @ "main"
+
+require logic from git "https://github.com/fgdorais/logic4" @ "main"
+
+--require GMLInit from git "https://github.com/fgdorais/GMLInit"@"main"

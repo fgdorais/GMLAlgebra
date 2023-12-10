@@ -2,6 +2,7 @@ import GMLAlgebra.Basic
 import GMLAlgebra.Instances
 import GMLAlgebra.Group
 
+open List
 open Logic
 
 namespace Algebra
@@ -117,16 +118,16 @@ theorem isReduced_rpos (h : w.isReduced) : (w.rpos i).isReduced := by
   | pos _ _ => exact h
   | neg j _ =>
     by_cases i = j with
-    | isTrue hij => unfold rpos; clean; rw [if_pos hij, isReduced_neg_tail h]
-    | isFalse hij => unfold rpos; clean; rw [if_neg hij, isReduced, decide_eq_true hij, h, and]
+    | isTrue hij => simp only [rpos]; rw [if_pos hij, isReduced_neg_tail h]
+    | isFalse hij => simp only [rpos]; rw [if_neg hij, isReduced, decide_eq_true hij, h]; rfl
 
 theorem isReduced_rneg (h : w.isReduced) : (w.rneg i).isReduced := by
   match w with
   | id => exact h
   | pos j _ =>
     by_cases i = j with
-    | isTrue hij => unfold rneg; clean; rw [if_pos hij, isReduced_pos_tail h]
-    | isFalse hij => unfold rneg; clean; rw [if_neg hij, isReduced, decide_eq_true hij, h, and]
+    | isTrue hij => simp only [rneg]; rw [if_pos hij, isReduced_pos_tail h]
+    | isFalse hij => simp only [rneg]; rw [if_neg hij, isReduced, decide_eq_true hij, h]; rfl
   | neg _ _ => exact h
 
 theorem isReduced_rapp (h : w.isReduced) : (rapp v w).isReduced := by
@@ -181,31 +182,31 @@ theorem rapp_rpos_left (h : w.isReduced) : rapp (rpos i v) w = rpos i (rapp v w)
   | pos j v => rfl
   | neg j v =>
     rw [rapp]
-    by_cases i = j with
+    match inferDecidable (i = j) with
     | isTrue rfl =>
-      rw [rpos_rneg_cancel, rpos]
-      clean
+      rw [rpos_rneg_cancel]
+      simp only [rpos]
       rw [if_pos trivial]
       exact isReduced_rapp h
     | isFalse hne =>
-      rw [rpos]
-      clean
+      simp only [rpos]
       rw [if_neg hne, rapp, rapp]
+      rfl
 
 theorem rapp_rneg_left (h : w.isReduced) : rapp (rneg i v) w = rneg i (rapp v w) := by
   match v with
   | id => rfl
   | pos j v =>
     rw [rapp]
-    by_cases i = j with
+    match inferDecidable (i = j) with
     | isTrue rfl =>
-      rw [rneg_rpos_cancel (isReduced_rapp h), rneg]
-      clean
+      rw [rneg_rpos_cancel (isReduced_rapp h)]
+      simp only [rneg]
       rw [if_pos trivial]
     | isFalse hne =>
-      rw [rneg]
-      clean
+      simp only [rneg]
       rw [if_neg hne, rapp, rapp]
+      rfl
   | neg j v => rfl
 
 theorem raux_rpos_left (h : w.isReduced) : raux (rpos i v) w = raux v (rneg i w) := by
@@ -216,13 +217,13 @@ theorem raux_rpos_left (h : w.isReduced) : raux (rpos i v) w = raux v (rneg i w)
     rw [raux]
     by_cases i = j with
     | isTrue rfl =>
-      rw [rpos_rneg_cancel h, rpos]
-      clean
+      rw [rpos_rneg_cancel h]
+      simp only [rpos]
       rw [if_pos trivial]
     | isFalse hne =>
-      rw [rpos]
-      clean
+      simp only [rpos]
       rw [if_neg hne, raux, raux]
+      rfl
 
 theorem raux_rneg_left (h : w.isReduced) : raux (rneg i v) w = raux v (rpos i w) := by
   match v with
@@ -231,13 +232,13 @@ theorem raux_rneg_left (h : w.isReduced) : raux (rneg i v) w = raux v (rpos i w)
     rw [raux]
     by_cases i = j with
     | isTrue rfl =>
-      rw [rneg_rpos_cancel h, rneg]
-      clean
+      rw [rneg_rpos_cancel h]
+      simp only [rneg]
       rw [if_pos trivial]
     | isFalse hne =>
-      rw [rneg]
-      clean
+      simp only [rneg]
       rw [if_neg hne, raux, raux]
+      rfl
   | neg j v => rfl
 
 theorem rapp_id (h : w.isReduced) : rapp w id = w := by
@@ -251,7 +252,7 @@ theorem rapp_id (h : w.isReduced) : rapp w id = w := by
     | neg j w =>
       by_cases i = j with
       | isTrue rfl => simp [isReduced] at h
-      | isFalse hne => rw [rpos]; clean; rw [if_neg hne]
+      | isFalse hne => simp only [rpos]; rw [if_neg hne]
   | neg i w ih =>
     rw [rapp, ih (isReduced_neg_tail h)]
     match w with
@@ -259,7 +260,7 @@ theorem rapp_id (h : w.isReduced) : rapp w id = w := by
     | pos j w =>
       by_cases i = j with
       | isTrue rfl => simp [isReduced] at h
-      | isFalse hne => rw [rneg]; clean; rw [if_neg hne]
+      | isFalse hne => simp only [rneg]; rw [if_neg hne]
     | neg j w => rfl
 
 theorem raux_id : raux w id = rinv w := rfl
@@ -301,8 +302,8 @@ theorem raux_eq (h : w.isReduced) : raux v w = rapp (rinv v) w := (rapp_raux_com
 theorem raux_self : raux w w = id := by
   induction w with
   | id => rfl
-  | pos i w ih => rw [raux, rneg]; clean; rw [if_pos trivial, ih]
-  | neg i w ih => rw [raux, rpos]; clean; rw [if_pos trivial, ih]
+  | pos i w ih => simp only [raux, rneg]; rw [if_pos trivial, ih]
+  | neg i w ih => simp only [raux, rpos]; rw [if_pos trivial, ih]
 
 section Eval
 variable (s : GroupSig α) [Group s]
@@ -331,12 +332,10 @@ theorem eval_rpos (i : Index xs) (a : Word xs) : eval s (rpos i a) = s.op i.val 
   | neg j a =>
     by_cases i = j with
     | isTrue rfl =>
-      rw [rpos]
-      clean
+      simp only [rpos]
       rw [if_pos trivial, eval_neg, ←op_assoc s.op, op_right_inv s.op, op_left_id s.op]
     | isFalse hne =>
-      rw [rpos]
-      clean
+      simp only [rpos]
       rw [if_neg hne, eval_pos]
 
 theorem eval_rneg (i : Index xs) (a : Word xs) : eval s (rneg i a) = s.op (s.inv i.val) (eval s a) := by
@@ -345,12 +344,10 @@ theorem eval_rneg (i : Index xs) (a : Word xs) : eval s (rneg i a) = s.op (s.inv
   | pos j a =>
     by_cases i = j with
     | isTrue rfl =>
-      rw [rneg]
-      clean
+      simp only [rneg]
       rw [if_pos trivial, eval_pos, ←op_assoc s.op, op_left_inv s.op, op_left_id s.op]
     | isFalse hne =>
-      rw [rneg]
-      clean
+      simp only [rneg]
       rw [if_neg hne, eval_neg]
   | neg j a => rfl
 
@@ -439,19 +436,19 @@ variable (s : GroupSig α) [Group s]
 def eval : Expr xs → α | ⟨a,_⟩ => Word.eval s a
 
 @[simp] theorem eval_lift (a : Expr xs) : eval s (Expr.lift x a) = eval s a := by
-  unfold Expr.lift eval; clean; rw [Word.eval_lift]
+  simp only [Expr.lift, eval]; rw [Word.eval_lift]
 
 @[simp] theorem eval_var (i : Index xs) : eval s (Expr.var i) = i.val := by
-  unfold Expr.var Expr.pos Expr.id eval; clean; rw [Word.eval_rpos, Word.eval_id, op_right_id s.op]
+  simp only [Expr.var, Expr.pos, Expr.id, eval]; rw [Word.eval_rpos, Word.eval_id, op_right_id s.op]
 
 @[simp] theorem eval_id : eval s (Expr.id (xs:=xs)) = s.id := by
-  unfold Expr.id eval; clean; rw [Word.eval_id]
+  simp only [Expr.id, eval]; rw [Word.eval_id]
 
 @[simp] theorem eval_inv (a : Expr xs) : eval s (Expr.inv a) = s.inv (eval s a) := by
-  unfold Expr.inv eval; clean; rw [Word.eval_rinv]
+  simp only [Expr.inv, eval]; rw [Word.eval_rinv]
 
 @[simp] theorem eval_op (a b : Expr xs) : eval s (Expr.op a b) = s.op (eval s a) (eval s b) := by
-  unfold Expr.op eval; clean; rw [Word.eval_raux, Word.eval_rinv, inv_invol s.inv]
+  simp only [Expr.op, eval]; rw [Word.eval_raux, Word.eval_rinv, inv_invol s.inv]
 
 end Eval
 

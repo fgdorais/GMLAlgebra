@@ -1,5 +1,6 @@
-import GMLInit.Data.Index
+import Extra
+import Logic
 
--- class Inv (α : Type _) where
---   inv : α → α
--- postfix:max "⁻¹" => Inv.inv
+class Inv (α : Type _) where
+  inv : α → α
+postfix:max "⁻¹" => Inv.inv

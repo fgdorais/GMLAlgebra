@@ -2,6 +2,7 @@ import GMLAlgebra.Basic
 import GMLAlgebra.Instances
 import GMLAlgebra.Semigroup
 
+open List
 open Logic
 
 namespace Algebra

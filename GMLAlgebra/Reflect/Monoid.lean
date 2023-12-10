@@ -3,6 +3,7 @@ import GMLAlgebra.Instances
 import GMLAlgebra.Monoid
 import GMLAlgebra.Reflect.Semigroup
 
+open List
 open Logic
 
 namespace Algebra.Monoid
