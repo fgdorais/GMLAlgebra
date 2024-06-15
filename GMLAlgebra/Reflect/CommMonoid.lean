@@ -50,7 +50,7 @@ variable [CommMonoid s]
   simp only [eval]
 
 @[simp] theorem eval_id : ∀ {xs : List α}, eval s (Expr.id (xs:=xs)) = s.id
-| [] => rfl
+| [] => by unfold eval; rfl
 | _::_ => by unfold eval Expr.id; exact eval_id
 
 @[simp] theorem eval_op {xs : List α} (a b : Expr xs) : eval s (Expr.op a b) = s.op (eval s a) (eval s b) := by
