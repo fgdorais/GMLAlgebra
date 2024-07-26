@@ -112,7 +112,7 @@ end Algebra
 
 section Example
 open Algebra Notation
-variable {α} (s : SemigroupSig α) [Semigroup s] (a b c d : α)
+variable {α : Type _} (s : SemigroupSig α) [Semigroup s] (a b c d : α)
 
 local infix:70 " ⋆ " => s.op
 

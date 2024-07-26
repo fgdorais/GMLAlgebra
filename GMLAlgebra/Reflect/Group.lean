@@ -495,7 +495,7 @@ end Algebra
 
 section Example
 open Algebra Notation
-variable {α} (s : GroupSig α) [Group s] (a b c d : α)
+variable {α : Type _} (s : GroupSig α) [Group s] (a b c d : α)
 
 local infixr:70 " ⋆ " => s.op
 local postfix:max "⁻¹" => s.inv

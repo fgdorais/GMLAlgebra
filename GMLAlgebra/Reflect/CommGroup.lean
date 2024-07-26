@@ -289,13 +289,13 @@ end Algebra.CommGroup
 
 section Example
 open Algebra Notation
-variable {α} (s : GroupSig α) [CommGroup s] (a b c d : α)
+variable {α : Type _} (s : GroupSig α) [CommGroup s]
 
 local infixr:70 " ⋆ " => s.op
 local postfix:max "⁻¹" => s.inv
 local notation "e" => s.id
 
-example : (a ⋆ b)⁻¹ ⋆ (c ⋆ d⁻¹) = e ⋆ ((c ⋆ a⁻¹ ⋆ e) ⋆ b⁻¹ ⋆ d⁻¹) :=
+example (a b c d : α) : (a ⋆ b)⁻¹ ⋆ (c ⋆ d⁻¹) = e ⋆ ((c ⋆ a⁻¹ ⋆ e) ⋆ b⁻¹ ⋆ d⁻¹) :=
   CommGroup.reflect s [a,b,c,d] rfl
 
 example (x y z : Int) : x + (-y + z) + z + -1 = z + (x - (0 + y)) + z - 1 :=

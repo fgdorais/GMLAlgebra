@@ -168,7 +168,7 @@ end Algebra.CommMonoid
 
 section Example
 open Algebra Notation
-variable {α} (s : MonoidSig α) [CommMonoid s] (a b c d : α)
+variable {α : Type _} (s : MonoidSig α) [CommMonoid s] (a b c d : α)
 
 local infix:70 " ⋆ " => s.op
 local notation "e" => s.id
