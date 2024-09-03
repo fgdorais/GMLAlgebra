@@ -306,7 +306,7 @@ theorem raux_self : raux w w = id := by
   | neg i w ih => simp only [raux, rpos]; rw [if_pos trivial, ih]
 
 section Eval
-variable (s : GroupSig α) [Group s]
+variable (s : GroupSig α)
 
 def eval : Word xs → α
 | id => s.id
@@ -319,13 +319,13 @@ theorem eval_pos (i : Index xs) (a : Word xs) : eval s (pos i a) = s.op i.val (e
 
 theorem eval_neg (i : Index xs) (a : Word xs) : eval s (neg i a) = s.op (s.inv i.val) (eval s a) := rfl
 
-theorem eval_lift (a : Word xs) (x : α) : eval s (lift x a) = eval s a := by
+theorem eval_lift [Group s] (a : Word xs) (x : α) : eval s (lift x a) = eval s a := by
   induction a with
   | id => rfl
   | pos i a ih => rw [lift, eval_pos, eval_pos, Index.val_tail, ih]
   | neg i a ih => rw [lift, eval_neg, eval_neg, Index.val_tail, ih]
 
-theorem eval_rpos (i : Index xs) (a : Word xs) : eval s (rpos i a) = s.op i.val (eval s a) := by
+theorem eval_rpos [Group s] (i : Index xs) (a : Word xs) : eval s (rpos i a) = s.op i.val (eval s a) := by
   match a with
   | id => rfl
   | pos j a => rfl
@@ -338,7 +338,7 @@ theorem eval_rpos (i : Index xs) (a : Word xs) : eval s (rpos i a) = s.op i.val 
       simp only [rpos]
       rw [if_neg hne, eval_pos]
 
-theorem eval_rneg (i : Index xs) (a : Word xs) : eval s (rneg i a) = s.op (s.inv i.val) (eval s a) := by
+theorem eval_rneg [Group s] (i : Index xs) (a : Word xs) : eval s (rneg i a) = s.op (s.inv i.val) (eval s a) := by
   match a with
   | id => rfl
   | pos j a =>
@@ -351,19 +351,19 @@ theorem eval_rneg (i : Index xs) (a : Word xs) : eval s (rneg i a) = s.op (s.inv
       rw [if_neg hne, eval_neg]
   | neg j a => rfl
 
-theorem eval_rapp (a b : Word xs) : eval s (rapp a b) = s.op (eval s a) (eval s b) := by
+theorem eval_rapp [Group s] (a b : Word xs) : eval s (rapp a b) = s.op (eval s a) (eval s b) := by
   induction a with
   | id => rw [rapp, eval_id, op_left_id s.op]
   | pos i a ih => rw [rapp, eval_pos, eval_rpos, ih, op_assoc s.op]
   | neg i a ih => rw [rapp, eval_neg, eval_rneg, ih, op_assoc s.op]
 
-theorem eval_raux (a b : Word xs) : eval s (raux a b) = s.op (s.inv (eval s a)) (eval s b) := by
+theorem eval_raux [Group s] (a b : Word xs) : eval s (raux a b) = s.op (s.inv (eval s a)) (eval s b) := by
   induction a generalizing b with
   | id => rw [raux, eval_id, inv_id s.inv, op_left_id s.op]
   | pos i a ih => rw [raux, eval_pos, ih, eval_rneg, inv_op s.inv, op_assoc s.op]
   | neg i a ih => rw [raux, eval_neg, ih, eval_rpos, inv_op s.inv, op_assoc s.op, inv_invol s.inv]
 
-theorem eval_rinv (a : Word xs) : eval s (rinv a) = s.inv (eval s a) := by
+theorem eval_rinv [Group s] (a : Word xs) : eval s (rinv a) = s.inv (eval s a) := by
   rw [rinv, eval_raux, eval_id, op_right_id s.op]
 
 end Eval
@@ -441,6 +441,7 @@ def eval : Expr xs → α | ⟨a,_⟩ => Word.eval s a
 @[simp] theorem eval_var (i : Index xs) : eval s (Expr.var i) = i.val := by
   simp only [Expr.var, Expr.pos, Expr.id, eval]; rw [Word.eval_rpos, Word.eval_id, op_right_id s.op]
 
+omit [Group s] in
 @[simp] theorem eval_id : eval s (Expr.id (xs:=xs)) = s.id := by
   simp only [Expr.id, eval]; rw [Word.eval_id]
 

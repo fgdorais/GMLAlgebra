@@ -38,8 +38,6 @@ def eval : {xs : List α} → Expr xs → α
 | _::_, cons 0 a => eval a
 | x::xs, cons (n+1) a => s.op x (eval (xs:=x::xs) (cons n a))
 
-variable [CommMonoid s]
-
 @[simp] theorem eval_lift {x : α} {xs : List α} (a : Expr xs) : eval s (Expr.lift x a) = eval s a := by
   simp only [eval]
 
@@ -53,7 +51,7 @@ variable [CommMonoid s]
 | [] => by unfold eval; rfl
 | _::_ => by unfold eval Expr.id; exact eval_id
 
-@[simp] theorem eval_op {xs : List α} (a b : Expr xs) : eval s (Expr.op a b) = s.op (eval s a) (eval s b) := by
+@[simp] theorem eval_op [CommMonoid s] {xs : List α} (a b : Expr xs) : eval s (Expr.op a b) = s.op (eval s a) (eval s b) := by
   induction xs with
   | nil =>
     match a, b with

@@ -44,7 +44,6 @@ def eval {xs : List α} : Expr xs → α
 | var i => i.val
 | app a i => s.op (eval a) i.val
 
-variable [Semigroup s]
 
 @[simp] theorem eval_lift (x) {xs} : ∀ (a : Expr xs), eval s (lift x a) = eval s a
 | var i => by simp [lift, eval]
@@ -54,7 +53,7 @@ variable [Semigroup s]
 
 @[simp] theorem eval_var {xs} (i : Index xs) : eval s (var i) = i.val := rfl
 
-@[simp] theorem eval_op {xs} : ∀ (a b : Expr xs), eval s (op a b) = s.op (eval s a) (eval s b)
+@[simp] theorem eval_op [Semigroup s] {xs} : ∀ (a b : Expr xs), eval s (op a b) = s.op (eval s a) (eval s b)
 | a, var i => rfl
 | a, app b i => by simp [eval, eval_op a b, Algebra.op_assoc s.op]
 

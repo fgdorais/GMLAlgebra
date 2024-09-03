@@ -47,6 +47,13 @@ def split {α} : {xs : List α} → Expr xs → CommMonoid.Expr xs × CommMonoid
   | .ofNat m, (ap, an) => (.cons m ap, .cons 0 an)
   | .negSucc m, (ap, an) => (.cons 0 ap, .cons (m+1) an)
 
+@[simp] theorem split_nil : (Expr.nil : Expr (α:=α) []).split = (.nil, .nil) := rfl
+
+theorem split_cons {x : α} {xs : List α} (a : Expr xs) (m) : (Expr.cons m a : Expr (x :: xs)).split =
+  match m, split a with
+  | .ofNat m, (ap, an) => (.cons m ap, .cons 0 an)
+  | .negSucc m, (ap, an) => (.cons 0 ap, .cons (m+1) an) := rfl
+
 theorem inv_mk {α} {xs : List α} (a b : CommMonoid.Expr xs) : .inv (mk a b) = mk b a := by
   induction xs with
   | nil =>
@@ -86,12 +93,12 @@ theorem mk_split {α} {xs : List α} (a : Expr xs) : mk a.split.fst a.split.snd 
   | cons x xs ih =>
     match a with
     | .cons (.ofNat n) a =>
-      rw [split]
+      rw [split_cons]
       rw [Expr.mk]
       rw [Int.mk_zero]
       rw [ih]
     | .cons (.negSucc n) a =>
-      rw [split]
+      rw [split_cons]
       rw [Expr.mk]
       rw [Int.zero_mk_succ]
       rw [ih]
@@ -103,17 +110,15 @@ def eval {xs : List α} (a : Expr xs) : α :=
   match a.split with
   | (ap, an) => s.op (ap.eval s.toMonoidSig) (s.inv (an.eval s.toMonoidSig))
 
-variable [CommGroup s]
-
 @[simp] theorem eval_cons_zero {x : α} {xs : List α} (a : Expr xs) : eval s (Expr.cons (x:=x) 0 a) = eval s a := by
-  simp only [eval, split]
+  simp only [eval, split_cons]
   match a.split with
   | (ap, an) =>
     rw [CommMonoid.Expr.eval_cons_zero]
     rw [CommMonoid.Expr.eval_cons_zero]
 
-@[simp] theorem eval_cons_one {x : α} {xs : List α} (a : Expr xs) : eval s (Expr.cons (x:=x) 1 a) = s.op x (eval s a) := by
-  simp only [eval, split]
+@[simp] theorem eval_cons_one [CommGroup s] {x : α} {xs : List α} (a : Expr xs) : eval s (Expr.cons (x:=x) 1 a) = s.op x (eval s a) := by
+  simp only [eval, split_cons]
   match a.split with
   | (ap, an) =>
     rw [CommMonoid.Expr.eval_cons_zero]
@@ -121,15 +126,15 @@ variable [CommGroup s]
     rw [CommMonoid.Expr.eval_cons_zero]
     rw [Algebra.op_assoc s.op]
 
-@[simp] theorem eval_cons_pos_succ {x : α} {xs : List α} (a : Expr xs) (n : Nat) : eval s (Expr.cons (x:=x) (Int.ofNat (n+1)) a) = s.op x (eval s (cons (x:=x) (Int.ofNat n) a)) := by
-  simp only [eval, split]
+@[simp] theorem eval_cons_pos_succ [CommGroup s] {x : α} {xs : List α} (a : Expr xs) (n : Nat) : eval s (Expr.cons (x:=x) (Int.ofNat (n+1)) a) = s.op x (eval s (cons (x:=x) (Int.ofNat n) a)) := by
+  simp only [eval, split_cons]
   match a.split with
   | (ap, an) =>
     rw [CommMonoid.Expr.eval_cons_succ]
     rw [Algebra.op_assoc s.op]
 
-@[simp] theorem eval_cons_neg_succ {x : α} {xs : List α} (a : Expr xs) (n : Nat) : eval s (Expr.cons (x:=x) (Int.negSucc n) a) = s.op (s.inv x) (eval s (cons (x:=x) (Int.negOfNat n) a)) := by
-  simp only [eval, split, Int.negOfNat]
+@[simp] theorem eval_cons_neg_succ [CommGroup s] {x : α} {xs : List α} (a : Expr xs) (n : Nat) : eval s (Expr.cons (x:=x) (Int.negSucc n) a) = s.op (s.inv x) (eval s (cons (x:=x) (Int.negOfNat n) a)) := by
+  simp only [eval, split_cons, Int.negOfNat]
   match a.split, n with
   | (ap, an), 0 =>
     rw [CommMonoid.Expr.eval_cons_succ]
@@ -140,7 +145,7 @@ variable [CommGroup s]
     rw [Algebra.inv_hom s.inv]
     rw [Algebra.op_left_comm s.op]
 
-theorem eval_mk {xs : List α} (a b : CommMonoid.Expr xs) : eval s (mk a b) = s.op (a.eval s.toMonoidSig) (s.inv (b.eval s.toMonoidSig)) := by
+theorem eval_mk [CommGroup s] {xs : List α} (a b : CommMonoid.Expr xs) : eval s (mk a b) = s.op (a.eval s.toMonoidSig) (s.inv (b.eval s.toMonoidSig)) := by
   induction xs with
   | nil =>
     match a, b with
@@ -185,16 +190,16 @@ theorem eval_mk {xs : List α} (a b : CommMonoid.Expr xs) : eval s (mk a b) = s.
 theorem eval_lift {x : α} {xs : List α} (a : Expr xs) : eval s (Expr.lift x a) = eval s a := by
   rw [eval_cons_zero]
 
-theorem eval_id : ∀ {xs : List α}, eval s (Expr.id (xs:=xs)) = s.id
+theorem eval_id [CommGroup s] : ∀ {xs : List α}, eval s (Expr.id (xs:=xs)) = s.id
 | [] => by
-  simp only [Expr.id, eval, split]
+  simp only [Expr.id, eval, split_cons, split_nil]
   rw [Algebra.op_right_inv s.op]
 | _::_ => by
   unfold Expr.id
   rw [eval_cons_zero]
   rw [eval_id]
 
-theorem eval_inv {xs : List α}  (a : Expr xs) : eval s (Expr.inv a) = s.inv (eval s a) := by
+theorem eval_inv [CommGroup s] {xs : List α}  (a : Expr xs) : eval s (Expr.inv a) = s.inv (eval s a) := by
   rw [←mk_split a]
   rw [inv_mk]
   rw [eval_mk]
@@ -202,7 +207,7 @@ theorem eval_inv {xs : List α}  (a : Expr xs) : eval s (Expr.inv a) = s.inv (ev
   rw [Algebra.inv_op s.inv]
   rw [Algebra.inv_invol s.inv]
 
-@[simp] theorem eval_op {xs : List α} (a b : Expr xs) : eval s (Expr.op a b) = s.op (eval s a) (eval s b) := by
+@[simp] theorem eval_op [CommGroup s] {xs : List α} (a b : Expr xs) : eval s (Expr.op a b) = s.op (eval s a) (eval s b) := by
   rw [←mk_split a, ←mk_split b]
   rw [mk_op_mk]
   rw [eval_mk]

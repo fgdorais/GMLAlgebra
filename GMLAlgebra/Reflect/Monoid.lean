@@ -40,8 +40,6 @@ def eval {xs : List α} : Expr xs → α
 | ofSemigroup e => e.eval s.toSemigroupSig
 | id => s.id
 
-variable [Monoid s]
-
 @[simp] theorem eval_lift (x) {xs} : ∀ (a : Expr xs), (Expr.lift x a).eval s = a.eval s
 | ofSemigroup _ => Semigroup.Expr.eval_lift _ _ _
 | id => rfl
@@ -50,7 +48,7 @@ variable [Monoid s]
 
 @[simp] theorem eval_id {xs} : (Expr.id : Expr xs).eval s = s.id := rfl
 
-@[simp] theorem eval_op {xs} : ∀ (a b : Expr xs), (Expr.op a b).eval s = s.op (a.eval s) (b.eval s)
+@[simp] theorem eval_op [Monoid s] {xs} : ∀ (a b : Expr xs), (Expr.op a b).eval s = s.op (a.eval s) (b.eval s)
 | ofSemigroup a, ofSemigroup b => by simp [eval, op]
 | id, ofSemigroup b => by simp [eval, op, Algebra.op_left_id s.op]
 | ofSemigroup a, id => by simp [eval, op, Algebra.op_right_id s.op]
