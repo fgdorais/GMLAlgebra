@@ -105,16 +105,16 @@ end Eval
 section Completeness
 
 theorem op_assoc {α} : ∀ {xs : List α} (a b c : Expr xs), Expr.op (Expr.op a b) c = Expr.op a (Expr.op b c)
-| [], _, _, _ => by unfold Expr.op; rfl
+| [], _, _, _ => by simp only [Expr.op]
 | _::_, cons l a, cons m b, cons n c => by simp only [Expr.op, Nat.add_assoc l m n, op_assoc a b c]
 
 theorem op_comm {α} : ∀ {xs : List α} (a b : Expr xs), Expr.op a b = Expr.op b a
-| [], _, _ => by unfold Expr.op; rfl
+| [], _, _ => by simp only [Expr.op]
 | _::_, cons m a, cons n b => by simp only [Expr.op, Nat.add_comm m n, op_comm a b]
 
 theorem op_right_id {α} : ∀ {xs : List α} (a : Expr xs), Expr.op a Expr.id = a
-| [], nil => by unfold Expr.op; rfl
-| _::_, cons n a => by simp only [Expr.op, Nat.add_zero n, op_right_id a]
+| [], nil => by simp only [Expr.op]
+| _::_, cons n a => by simp only [Expr.id, Expr.op, Nat.add_zero, op_right_id a]
 
 def sig {α} (xs : List α) : MonoidSig (Expr xs) where
   op := Expr.op

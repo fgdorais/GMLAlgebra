@@ -55,7 +55,7 @@ def eval {xs : List α} : Expr xs → α
 
 @[simp] theorem eval_op [Semigroup s] {xs} : ∀ (a b : Expr xs), eval s (op a b) = s.op (eval s a) (eval s b)
 | a, var i => rfl
-| a, app b i => by simp [eval, eval_op a b, Algebra.op_assoc s.op]
+| a, app b i => by simp only [eval, op, eval_op, op_assoc s.op]
 
 end Eval
 
